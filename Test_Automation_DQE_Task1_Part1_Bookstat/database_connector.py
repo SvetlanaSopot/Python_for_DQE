@@ -5,7 +5,7 @@ import logger_mod
 
 # Bookstatbase connection, create and populate tables
 class Database:
-    database_name = 'C:/Users/sviatlana_sopat/PycharmProjects/run_project_bookstat/bookstatbase.db'
+    database_name = 'bookstatbase.db'
 
     def connection(self):
         conn = sqlite3.connect(self.database_name)
