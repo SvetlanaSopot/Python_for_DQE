@@ -5,6 +5,7 @@ import os
 import shutil
 import time
 import logger_mod
+import xml.dom.minidom
 
 class Watcher:   # Scanning input directory for new .fb2 files, moving incorrect files into incorrect_input directory
     def rchop(self, string, ending):
@@ -33,9 +34,19 @@ class Watcher:   # Scanning input directory for new .fb2 files, moving incorrect
 
                     print('New .fb2 file detected ' + node)
                     logger_mod.logging.info('New .fb2 file detected ' + node)
-                    statistics_calculator.calculate_book_statistic(directory + '/' + node)
-                    statistics_calculator.calculate_book_word_count(self.rchop(node, '.fb2'), directory + '/' + node)
-                    processed_files.append(node)
+                    try:
+                        statistics_calculator.calculate_book_statistic(directory + '/' + node)
+                        statistics_calculator.calculate_book_word_count(self.rchop(node, '.fb2'), directory + '/' + node)
+                        processed_files.append(node)
+
+                    except xml.parsers.expat.ExpatError:
+                        shutil.move(os.path.join(directory, node),
+                                    os.path.join(wrong_files_directory, node))
+                        print('The file ' + node + ' is not suitable for collecting statistics, parsing is not possible.'
+                                                   ' File moved to folder ' + wrong_files_directory)
+                        logger_mod.logging.info('The file ' + node + ' is not suitable for collecting statistics,'
+                                                                     ' parsing is not possible. File moved to folder '
+                                                                     + wrong_files_directory)
 
             time.sleep(5)
 

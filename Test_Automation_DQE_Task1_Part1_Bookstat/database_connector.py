@@ -18,21 +18,21 @@ class Database:
         conn = self.connection()
         cursor = conn.cursor()
 
-        for words in counts.keys():
+        for words, val in counts.items():
 
-            #print(words, counts[words])
-            add_counts = [(words, counts[words], 0)]
+            #print(words, val)
+            add_counts = [(words, val, 0)]
             cursor.executemany("INSERT INTO \"" + book_id + "\" VALUES (?,?,?)", add_counts)
 
         conn.commit()
-        for words in counts_upp.keys():
-            if words.istitle() is True:
+        for words_n, val_n in counts_upp.items():
+            #if words.istitle() is True:
 
-                #add_upp_counts = [(counts_upp[words], words)]
-                add_upp_counts = counts_upp[words]
-                add_upp = words
-                cursor.execute("UPDATE \"" + book_id + "\"  SET count_uppercase = ? WHERE word=?",
-                               (add_upp_counts, add_upp))
+            #print(words, add_upp_counts)
+            #add_upp_counts = [(counts_upp[words], words)]
+
+            cursor.execute("UPDATE \"" + book_id + "\"  SET count_uppercase = ? WHERE word=?",
+                           (val_n, words_n))
         conn.commit()
 
     def initialize_book_new_table(self, table_name):   # initialize of new table

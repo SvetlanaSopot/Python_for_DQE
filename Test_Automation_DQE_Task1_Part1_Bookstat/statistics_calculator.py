@@ -28,20 +28,22 @@ class StatisticsCalculator:
             alltext = " ".join(z.nodeValue for z in text.childNodes if z.nodeType == z.TEXT_NODE)
 
             p_t = str(alltext)  # change type to string
-
+            p_t_new = re.findall(r'\b[a-zA-Zа-яА-Я]{1,15}\b', p_t)
+            #print(p_t)
+            #print(p_t_new)
             for x in range(len(p_t)):
                 if p_t[x].isalpha() is True:  # if the symbol is a letter, we count with accumulation
                     count_text += 1
                 count_p += count_text  # add a text variable between paragraphs to the variable for counting paragraphs
                 count_text = 0  # and before the new iteration we nullify the variable
 
-            word_text = p_t.split()  # for words count we divided text on words
+            #word_text = p_t_new.split()  # for words count we divided text on words
 
-            for w in range(len(word_text)):
-                if word_text[w].istitle() is True:
+            for w in range(len(p_t_new)):
+                if p_t_new[w].istitle() is True:
                     upperl += 1
 
-                elif word_text[w].islower() is True:
+                elif p_t_new[w].islower() is True:
                     lowercasel += 1
                 count_low += lowercasel
                 count_upp += upperl
@@ -51,9 +53,10 @@ class StatisticsCalculator:
                 count_word = 0
                 upperl = 0
                 lowercasel = 0
+                #print(w)
 
         bookt = doc.getElementsByTagName("book-title")
-        # print ("%d bookt" % bookt.length)
+
         for title in bookt:
             pass
         book_name = "".join(t.nodeValue for t in title.childNodes if t.nodeType == t.TEXT_NODE)
@@ -78,23 +81,26 @@ class StatisticsCalculator:
         p = doc.getElementsByTagName("p")
 
         frequency = {}
-
+        frequency_l = {}
 
         for text in p:
             alltext = " ".join(z.nodeValue for z in text.childNodes if z.nodeType == z.TEXT_NODE)
             p_t = str(alltext)  # меняем тип на строковый
 
             # text_string = p_t.lower()
-            match_pattern = re.findall(r'\b[а-яА-Я]{1,15}\b', p_t)
+            match_pattern = re.findall(r'\b[a-zA-Zа-яА-Я]{1,15}\b', p_t)
 
             for word in match_pattern:
                 if word.isupper() is True:
-                    count_upp = frequency.get(word, 0)
-                    frequency[word] = count_upp + 1
+                    ct = word.lower()
+                    count_upp = frequency.get(ct, 0)
+                    frequency[ct] = count_upp + 1
                 else:
-                    count = frequency.get(word, 0)
-                    frequency[word] = count + 1
-
-        database.add_book_word_counts(book_id, frequency, frequency)
+                    dt = word.lower()
+                    count_i = frequency_l.get(dt, 0)
+                    frequency_l[dt] = count_i + 1
+        #print(frequency)
+        #print(frequency_l)
+        database.add_book_word_counts(book_id, frequency_l, frequency)
 
         return
