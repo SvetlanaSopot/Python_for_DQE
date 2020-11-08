@@ -1,8 +1,0 @@
-{
-  "dev": {
-    "database": "bookstatbase.db",
-    "test_data_folder": "test_data"
-  },
-  "uat": {
-  }
-}

@@ -89,5 +89,5 @@ class Database:
             conn.commit()
         except sqlite3.IntegrityError:
             pass
-            print('Unique constraint: This book statistic is already exist')
-            logger_mod.logging.info('Unique constraint: This book statistic is already exist')
+            print('Unique constraint: This book statistic is already existed')
+            logger_mod.logging.info('Unique constraint: This book statistic is already existed')
